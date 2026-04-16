@@ -1,0 +1,24 @@
+[
+    {
+        "email": "admin@abchem.co.in",
+        "password": "$2y$10$2JIxKgq\/3NE50NjWpl6n\/.7Yc2G8f11URHqfj1nKLQhBFC.QC05ua",
+        "role": "Admin",
+        "user_type": "Admin",
+        "company_name": "AB Chem India",
+        "contact_name": "Administrator",
+        "phone": "",
+        "status": "Active",
+        "created_at": "2026-04-10 00:00:00"
+    },
+    {
+        "email": "kishoreg@alum.iisc.ac.in",
+        "password": "$2y$10$AbC1dE2fG3hI4jK5lM6nO7pQ8rS9tU0vW1xY2zA3bC4dE5fG6hI7",
+        "role": "End User",
+        "user_type": "Customer",
+        "company_name": "IISc",
+        "contact_name": "Kishore R Gade",
+        "phone": "9445184632",
+        "status": "Active",
+        "created_at": "2026-04-10 08:50:31"
+    }
+]

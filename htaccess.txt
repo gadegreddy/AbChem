@@ -1,0 +1,132 @@
+# BEGIN LSCACHE
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteRule litespeed/debug/.*\.log$ - [F,L]
+RewriteRule \.litespeed_conf\.dat - [F,L]
+</IfModule>
+<IfModule LiteSpeed>
+CacheLookup on
+RewriteRule .* - [E=Cache-Control:no-autoflush]
+
+### marker ASYNC start ###
+RewriteCond %{REQUEST_URI} /wp-admin/admin-ajax\.php
+RewriteCond %{QUERY_STRING} action=async_litespeed
+RewriteRule .* - [E=noabort:1]
+### marker ASYNC end ###
+
+### marker DROPQS start ###
+CacheKeyModify -qs:fbclid
+CacheKeyModify -qs:gclid
+CacheKeyModify -qs:utm*
+CacheKeyModify -qs:_ga
+### marker DROPQS end ###
+
+</IfModule>
+## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
+# END LSCACHE
+
+# ─── GENERAL SECURITY ────────────────────────────────────────────────────────
+Options -Indexes
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' https: data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://pubchem.ncbi.nlm.nih.gov https://www.ebi.ac.uk https://www.zohoapis.in;"
+</IfModule>
+
+# ─── BLOCK SENSITIVE FILES FROM DIRECT BROWSER ACCESS ───────────────────────
+# Uses Apache 2.4 syntax (compatible with LiteSpeed)
+<FilesMatch "(users|queries|audit_log|zoho_token|products_master)\.(?:json|csv)$">
+  Require all denied
+</FilesMatch>
+
+<FilesMatch "\.(log|bak|tmp|sql|env|cache)$">
+  Require all denied
+</FilesMatch>
+
+# Block hidden files (dot files) except .well-known
+<FilesMatch "^\.(?!well-known)">
+  Require all denied
+</FilesMatch>
+
+# Block direct access to functions.php only (others have session gates inside)
+<FilesMatch "^functions\.php$">
+  Require all denied
+</FilesMatch>
+
+# ─── PHP HARDENING ────────────────────────────────────────────────────────────
+<IfModule mod_php8.c>
+  php_value session.cookie_httponly 1
+  php_value session.cookie_secure 1
+  php_flag  session.use_only_cookies 1
+</IfModule>
+<IfModule mod_php7.c>
+  php_value session.cookie_httponly 1
+  php_value session.cookie_secure 1
+  php_flag  session.use_only_cookies 1
+</IfModule>
+
+# ─── REWRITE ENGINE ──────────────────────────────────────────────────────────
+RewriteEngine On
+
+# 1. Force HTTPS + www
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\.abchem\.co\.in$ [NC]
+RewriteRule ^(.*)$ https://www.abchem.co.in/$1 [L,R=301]
+
+# 2. Skip rewrites for real files and directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# ─── CLEAN PAGE URLS (no .php) ───────────────────────────────────────────────
+
+# Auth
+RewriteRule ^signin$          signin.php    [L,QSA,NC]
+RewriteRule ^signup$          signup.php    [L,QSA,NC]
+RewriteRule ^logout$          logout.php    [L,QSA,NC]
+
+# Main pages
+RewriteRule ^catalog$         catalog.php   [L,QSA,NC]
+RewriteRule ^admin$           admin.php     [L,QSA,NC]
+RewriteRule ^account$         account.php   [L,QSA,NC]
+RewriteRule ^contact$         contact.php   [L,QSA,NC]
+RewriteRule ^about$           about.php     [L,QSA,NC]
+
+# Service pages
+RewriteRule ^custom-synthesis$ custom-synthesis.php [L,QSA,NC]
+RewriteRule ^purification$    purification.php  [L,QSA,NC]
+RewriteRule ^structure-search$ structure-search.php [L,QSA,NC]
+
+# Admin tools (gate handled inside PHP, not here)
+RewriteRule ^pubchem$         pubchem_fetch.php [L,QSA,NC]
+RewriteRule ^zoho-connect$    zoho_helper.php?connect=1 [L,QSA,NC]
+
+# Product detail: /product/slug-name → product.php?slug=slug-name
+RewriteRule ^product/([a-z0-9][a-z0-9\-]*)$ product.php?slug=$1 [L,QSA,NC]
+
+# Category / type browse
+RewriteRule ^category/([a-z0-9\-]+)$ catalog.php?category=$1 [L,QSA,NC]
+RewriteRule ^type/([a-z0-9\-]+)$     catalog.php?type=$1     [L,QSA,NC]
+
+# ─── PERFORMANCE ─────────────────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css                  "access plus 1 month"
+  ExpiresByType application/javascript    "access plus 1 month"
+  ExpiresByType image/png                 "access plus 1 year"
+  ExpiresByType image/webp                "access plus 1 year"
+  ExpiresByType image/jpeg                "access plus 1 year"
+  ExpiresByType image/svg+xml             "access plus 1 year"
+  ExpiresByType application/json          "access plus 1 hour"
+</IfModule>
+
+# ─── DEFAULT INDEX ────────────────────────────────────────────────────────────
+DirectoryIndex index.php index.html

@@ -1,0 +1,22 @@
+[
+    {
+        "id": "69d898dad9759",
+        "name": "Kishore R Gade",
+        "email": "kishoreg@alum.iisc.ac.in",
+        "type": "general",
+        "subject": "TEst",
+        "message": "test",
+        "date": "2026-04-10 06:29:46",
+        "status": "New"
+    },
+    {
+        "id": "69d8baee73951",
+        "name": "Kishore R Gade",
+        "email": "kishoreg@alum.iisc.ac.in",
+        "type": "general",
+        "subject": "TEst",
+        "message": "fsf",
+        "date": "2026-04-10 08:55:10",
+        "status": "New"
+    }
+]
