@@ -25,7 +25,7 @@ function enforceSessionTimeout($timeoutSeconds = 900) {
             );
         }
         session_destroy();
-        header('Location: /signin?expired=1');
+        header('Location: /signin.php?expired=1');
         exit;
     }
     
