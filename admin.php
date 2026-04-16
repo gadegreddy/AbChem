@@ -3,9 +3,12 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 require_once 'functions.php';
 
+// Enforce 15-minute session timeout
+enforceSessionTimeout(900);
+
 // ── Gate: Admins only ────────────────────────────────────────────────────────
 if (!isset($_SESSION['role']) || !checkRole('Admin')) {
-    header('Location: signin'); exit;
+    header('Location: signin.php'); exit;
 }
 
 // ── Download actions (must run before any HTML output) ───────────────────────

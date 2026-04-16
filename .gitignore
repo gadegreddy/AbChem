@@ -1,0 +1,46 @@
+```
+# Dependencies
+vendor/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist/
+build/
+*.o
+*.obj
+*.out
+
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Coverage reports
+coverage/
+htmlcov/
+.coverage
+
+# Cache directories
+.cache/
+.mypy_cache/
+.pytest_cache/
+```

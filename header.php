@@ -18,7 +18,7 @@ require_once 'functions.php';
 </a>
     <!-- Search Bar -->
     <div class="search-container" style="position:relative; flex:1; max-width:500px; margin:0 20px;">
-        <form action="/catalog" method="get" id="header-search-form" style="display:flex; width:100%;">
+        <form action="/search.php" method="get" id="header-search-form" style="display:flex; width:100%;">
             <input type="text" name="q" id="smart-search-input" placeholder="Search by Name, CAS, SMILES..." autocomplete="off" style="flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:6px 0 0 6px; font-size:0.9rem;">
             <button type="submit" class="btn btn-primary" style="border-radius:0 6px 6px 0; padding:10px 16px;">🔍</button>
         </form>

@@ -8,7 +8,7 @@ require_once 'functions.php';
 if (php_sapi_name() !== 'cli') {
     enforceSessionTimeout(900); // 900 sec = 15 minutes
     if (!isset($_SESSION['role']) || !checkRole('Admin')) {
-        header('Location: /signin');
+        header('Location: signin.php');
         exit;
     }
 }
@@ -491,7 +491,7 @@ class PubChemFetcher {
      * Fetch compound properties
      */
     private function fetchProperties($cid) {
-        $props = ['MolecularFormula','MolecularWeight','CanonicalSMILES','IsomericSMILES','IUPACName','InChI','InChIKey'];
+        $props = ['MolecularFormula','MolecularWeight','SMILES','CanonicalSMILES','IsomericSMILES','IUPACName','InChI','InChIKey'];
         $url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{$cid}/property/" . implode(',', $props) . "/JSON";
         
         $response = $this->fetchURL($url);
@@ -505,7 +505,7 @@ class PubChemFetcher {
         return [
             'molecular_formula' => $p['MolecularFormula'] ?? '',
             'molecular_weight'  => $p['MolecularWeight'] ?? '',
-            'smiles'            => $p['IsomericSMILES'] ?? $p['CanonicalSMILES'] ?? '',
+            'smiles'            => $p['IsomericSMILES'] ?? $p['CanonicalSMILES'] ?? $p['SMILES'] ?? '',
             'inchi'             => $p['InChI'] ?? '',
             'inchi_key'         => $p['InChIKey'] ?? '',
             'iupac_name'        => $p['IUPACName'] ?? ''
